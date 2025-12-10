@@ -8,9 +8,25 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ### 📖 專案概述 (Project Overview)
-本專案是一個全端數據分析解決方案，旨在解決 Steam 平台上的**「資訊過載」與「發現困難」**問題。
+本專案是一個全端數據分析解決方案，旨在解決 Steam 平台上的「資訊過載」與「發現困難」問題。
 
 透過容器化微服務架構，我們整合了 **Hybrid ETL 數據管線**、**關聯式資料庫**與 **機器學習模型**，構建了一個互動式儀表板。該平台不僅提供宏觀的市場趨勢分析，更利用 **混合推薦系統 (Hybrid Recommendation System)** 為玩家提供精準的個性化遊戲推薦，展現了數據驅動決策 (Data-Driven Decision Making) 的商業價值。
+
+---
+
+### 📸 系統展示 (System Demo)
+
+> 實際運行畫面展示：全域篩選儀表板與 AI 分析結果。
+
+| **全景儀表板 (Dashboard)** | **玩家輿情與推薦 (Analysis)** |
+|:---:|:---:|
+| <img src="docs/images/Overall Dashboard_1.jpg" alt="Dashboard Demo" width="100%"/>
+| <img src="docs/images/Overall Dashboard_2.jpg" alt="Dashboard Demo" width="100%"/>
+| <img src="docs/images/Overall Dashboard_3.jpg" alt="Dashboard Demo" width="100%"/>
+| <img src="docs/images/Overall Dashboard_4.jpg" alt="Dashboard Demo" width="100%"/>
+| <img src="docs/images/智慧推薦模擬.jpg" alt="Dashboard Demo" width="100%"/>
+| <img src="docs/images/玩家評論分析.jpg" alt="Dashboard Demo" width="100%"/>
+| *圖 1：全域連動篩選與市場供需分析* | *圖 2：多國語言輿情與 AI 推薦結果* |
 
 ---
 
@@ -55,6 +71,7 @@
                                              +-----------------+
                                              |    Raw CSVs     |
                                              +-----------------+
+
 📂 專案結構 (Project Structure)
 Bash
 

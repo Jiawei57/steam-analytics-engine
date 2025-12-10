@@ -1,0 +1,21 @@
+# 使用官方的 Python 3.9 slim 版本作為基礎映像檔，體積更小
+FROM python:3.9-slim
+
+# 在容器內建立一個名為 /app 的工作目錄
+WORKDIR /app
+
+# 將 requirements.txt 複製到容器的 /app 目錄下
+COPY requirements.txt .
+
+# --- 安裝編譯 scikit-surprise 所需的系統依賴 ---
+# 更新 apt 套件列表，並安裝 build-essential (包含 gcc 等編譯工具)
+# && rm -rf /var/lib/apt/lists/* 是個好習慣，可以減少最終映像檔的體積
+RUN apt-get update && apt-get install -y build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# 執行 pip 安裝所有依賴套件
+# --no-cache-dir 選項可以減少映像檔的體積
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 預設啟動命令 (主要給 webapp 服務使用，etl 服務會覆蓋此命令)
+CMD ["streamlit", "run", "src/webapp/Home.py"]

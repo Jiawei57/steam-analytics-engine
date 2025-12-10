@@ -1,0 +1,28 @@
+# .github/workflows/security-scan.yml
+
+name: Security Scan
+
+on:
+  # 在推送到 main 分支時觸發
+  push:
+    branches: [ main ]
+  # 在建立或更新 Pull Request 時觸發
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install and run pip-audit
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt

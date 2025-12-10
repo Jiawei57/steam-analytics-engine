@@ -1,0 +1,13 @@
+streamlit>=1.32.0
+pandas>=2.0.0
+numpy
+scikit-learn
+scikit-surprise
+sqlalchemy
+psycopg2-binary
+python-dotenv
+joblib
+polars==0.20.0
+plotly>=5.18.0
+pandera>=0.18.0
+pytest

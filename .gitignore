@@ -1,0 +1,26 @@
+# Python 暫存檔
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 虛擬環境
+.venv/
+venv/
+env/
+
+# 環境變數 (內含密碼，絕對不能上傳)
+.env
+
+# 資料檔案 (超過 100MB 絕對不能上傳)
+data/raw/*.csv
+data/processed/*.csv
+data/models/*.pkl
+
+# IDE 設定
+.vscode/
+.idea/
+
+# 作業系統垃圾檔 
+.DS_Store
+Thumbs.db
+Desktop.ini

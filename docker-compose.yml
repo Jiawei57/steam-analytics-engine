@@ -1,0 +1,62 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  # 資料庫服務 (PostgreSQL)
+  db:
+    image: postgres:13-alpine
+    container_name: steam-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # Web 應用服務 (Streamlit 前端)
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.webapp
+    container_name: steam-webapp
+    env_file: .env
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app  # 掛載當前目錄，讓程式碼修改能即時生效
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+  # ETL & ML Pipeline (資料處理 + 模型訓練)
+  etl:
+    build:
+      context: .
+      dockerfile: Dockerfile.webapp
+    container_name: steam-etl
+    env_file: .env
+    environment:
+      - POSTGRES_HOST=steam-db
+      - POSTGRES_PORT=5432
+    volumes:
+      - .:/app  # 掛載目錄，確保訓練好的 .pkl 模型能存回主機
+    depends_on:
+      db:
+        condition: service_healthy
+    # 核心修改：使用 sh -c 串聯兩個指令
+    # 1. process_steam_data.py: 讀取 CSV -> 清洗 -> Upsert 到資料庫
+    # 2. train_model.py: 從資料庫讀取 -> 訓練 TF-IDF -> 儲存模型檔
+    command: /bin/sh -c "python scripts/process_steam_data.py && python scripts/train_model.py"
+
+# 定義資料庫持久化儲存區
+volumes:
+  postgres_data:

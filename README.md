@@ -18,13 +18,13 @@
 
 #### 1. 📊 互動式市場儀表板 (KPI Dashboard)
 - **商業指標監控**：即時展示「收錄遊戲總數」、「平均售價」、「累積評論數」等關鍵績效指標 (KPI)。
-- **全域連動篩選**：側邊欄支援依據 **年份、遊戲類型、價格區間** 進行多維度下鑽分析 (Drill-down)，圖表會自動響應篩選結果。
-- **智慧視角切換**：系統自動偵測資料量級，在「宏觀趨勢圖」與「微觀競品分析 (氣泡圖)」之間切換。
+- **全域連動篩選**：側邊欄支援依據 **年份、遊戲類型、價格區間** 進行多維度下鑽分析 (Drill-down)。
+- **智慧視角切換**：自動偵測資料量級，在「宏觀趨勢圖」與「微觀競品分析 (氣泡圖)」之間切換。
 
 #### 2. 🗣️ 玩家評論深度分析 (Sentiment EDA)
 - **大數據輿情監測**：利用 **Polars** 引擎秒級處理數百萬筆評論資料，分析好評率趨勢。
 - **多國語言分析**：自動偵測並篩選不同語系 (如繁中、英文) 的玩家評論，洞察在地化市場反應。
-- **關鍵字提取**：自動歸納好評與負評中的熱門關鍵字 (Top Keywords)，協助開發者優化產品。
+- **關鍵字提取**：自動歸納好評與負評中的熱門關鍵字 (Top Keywords)。
 
 #### 3. 🤖 雙引擎 AI 推薦系統 (Explainable AI)
 - **可解釋性推薦 (XAI)**：不只給出推薦列表，更直接展示「推薦理由」(例如：共同標籤、好評率、風格相似)，提升使用者信任度。
@@ -32,45 +32,69 @@
 
 #### 4. ⚙️ 自動化 ETL 數據管線
 - **Hybrid ETL 架構**：
-    - **Extract/Transform**: 使用 **Polars** 處理 7GB+ 原始資料的清洗與特徵工程，解決記憶體瓶頸。
-    - **Load**: 轉換為 Pandas 以無縫對接 SQLAlchemy，支援資料庫 **Upsert (ON CONFLICT)** 更新機制。
+    - **Extract/Transform**: 使用 **Polars** 處理 7GB+ 原始資料，解決記憶體瓶頸。
+    - **Load**: 轉換為 Pandas 以無縫對接 SQLAlchemy，支援資料庫 **Upsert** 更新機制。
 - **資料品質驗證**：整合 **Pandera** 進行資料 Schema 驗證，確保資料完整性。
 
 ---
 
 ### 🏗️ 系統架構 (System Architecture)
 
-```mermaid
-graph TD
-    User((使用者))
-    WebApp[🌐 Web App<br>(Streamlit)]
-    DB[(PostgreSQL)]
-    ETL[⚙️ ETL Service<br>(Polars)]
-    RawData[📄 CSV / API]
+```text
++--------+       +-------------------+       +-----------------+
+|  User  | ----> |  Web App (8501)   | <---> |   PostgreSQL    |
++--------+       +-------------------+       +-----------------+
+  (Browser)               ^                           ^
+                          | (Read Model)              | (Upsert Data)
+                          |                           |
+                 +-------------------+       +-----------------+
+                 |   ML Inference    | <---- |   ETL Service   |
+                 +-------------------+       +-----------------+
+                                                      ^
+                                                      | (Polars Read)
+                                             +-----------------+
+                                             |    Raw CSVs     |
+                                             +-----------------+
+📂 專案結構 (Project Structure)
+Bash
 
-    User -->|瀏覽| WebApp
-    
-    subgraph "Docker Container Network"
-        WebApp -->|讀取數據| DB
-        ETL -->|高速寫入| DB
-        RawData -->|資料來源| ETL
-    end
-    
-    style User fill:#f9f,stroke:#333,stroke-width:2px
-    style WebApp fill:#bbf,stroke:#333,stroke-width:2px
-    style DB fill:#bfb,stroke:#333,stroke-width:2px
-    style ETL fill:#fbf,stroke:#333,stroke-width:2px
+Steam-Analytics-Engine/
+├── data/
+│   ├── raw/                  # 原始數據 (需自行下載)
+│   ├── models/               # 訓練好的 ML 模型 (.pkl)
+│   └── processed/            # 清理後的中間產物
+├── scripts/
+│   ├── process_steam_data.py # Hybrid ETL 主程式 (含 Pandera 驗證)
+│   └── train_model.py        # 模型訓練腳本
+├── src/
+│   └── webapp/               # Streamlit 前端應用
+│       ├── Home.py           # 入口首頁
+│       └── pages/            # 1_Dashboard, 2_Reviews, 3_Recommendation
+├── tests/                    # 單元測試 (Pytest)
+├── .env                      # 環境變數
+├── docker-compose.yml        # 服務編排設定
+├── requirements.txt          # Python 相依套件
+├── merge_reviews.py          # 大數據合併工具 (Polars)
+├── Makefile                  # 專案指令集 (One-click commands)
+└── README.md                 # 專案說明文件
+📦 資料來源與設定 (Data Source Setup)
+由於原始資料集 (Raw Data) 體積龐大 (>7GB)，不包含在本儲存庫中。請依照以下步驟準備資料：
 
-🛠️ 技術棧 (Tech Stack)
-領域	技術/工具	用途
-Infrastructure	Docker & Docker Compose	容器化部署、服務編排、環境隔離
-Backend / ETL	Python, Polars, SQLAlchemy	高效能數據提取、轉換、載入 (ETL)
-Data Quality	Pandera, Pytest	資料綱要驗證 (Schema Validation) 與單元測試
-Database	PostgreSQL	持久化存儲結構化遊戲數據
-Frontend	Streamlit, Plotly	快速構建互動式數據應用與視覺化
-Machine Learning	Scikit-learn, TF-IDF	內容過濾推薦演算法
+下載資料集：
 
-匯出到試算表
+遊戲元數據：Kaggle - Steam Games Dataset (重新命名為 games_2025.csv)
+
+玩家評論數據：Kaggle - Steam Games Reviews 2024 (解壓至資料夾)
+
+放置檔案： 將 games_2025.csv 放入 data/raw/。
+
+執行合併腳本 (針對評論資料)：
+
+Bash
+
+export STEAM_REVIEWS_PATH="/path/to/downloaded/SteamReviews2024"
+python merge_reviews.py
+(此步驟將自動產出清洗後的 reviews_2024.csv)
 
 ⚡ 快速開始 (Getting Started)
 本專案提供 Makefile 支援，一鍵管理生命週期。
@@ -87,6 +111,7 @@ Bash
 
 make docker-up
 # 或: docker-compose up --build
+
 3. 本機開發模式 (Optional)
 Bash
 

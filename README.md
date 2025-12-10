@@ -41,14 +41,26 @@
 ### 🏗️ 系統架構 (System Architecture)
 
 ```mermaid
-graph LR
-    User((使用者)) --> WebApp[🌐 Web App (Streamlit)]
+graph TD
+    User((使用者))
+    WebApp[🌐 Web App<br>(Streamlit)]
+    DB[(PostgreSQL)]
+    ETL[⚙️ ETL Service<br>(Polars)]
+    RawData[📄 CSV / API]
+
+    User -->|瀏覽| WebApp
     
     subgraph "Docker Container Network"
-        WebApp -- 讀取分析數據/模型 --> DB[(PostgreSQL)]
-        ETL[⚙️ ETL Service (Polars)] -- 高速寫入 --> DB
-        RawData[📄 CSV / API] --> ETL
+        WebApp -->|讀取數據| DB
+        ETL -->|高速寫入| DB
+        RawData -->|資料來源| ETL
     end
+    
+    style User fill:#f9f,stroke:#333,stroke-width:2px
+    style WebApp fill:#bbf,stroke:#333,stroke-width:2px
+    style DB fill:#bfb,stroke:#333,stroke-width:2px
+    style ETL fill:#fbf,stroke:#333,stroke-width:2px
+
 🛠️ 技術棧 (Tech Stack)
 領域	技術/工具	用途
 Infrastructure	Docker & Docker Compose	容器化部署、服務編排、環境隔離
@@ -68,9 +80,9 @@ Bash
 
 git clone [https://github.com/your-username/steam-analytics-engine.git](https://github.com/your-username/steam-analytics-engine.git)
 cd steam-analytics-engine
+
 2. 啟動服務 (Docker 模式 - 推薦)
 一鍵啟動所有服務（包含 DB 初始化、ETL 資料寫入與 Web App）：
-
 Bash
 
 make docker-up
@@ -87,5 +99,6 @@ make test
 
 # 啟動網頁
 make run-app
+
 4. 訪問應用
 數據儀表板: http://localhost:8501

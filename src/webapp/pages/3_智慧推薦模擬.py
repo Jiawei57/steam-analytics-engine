@@ -6,12 +6,12 @@ from sklearn.metrics.pairwise import linear_kernel
 
 st.set_page_config(page_title="推薦引擎模擬", page_icon="🤖", layout="wide")
 
-# --- CSS 優化 (統一全站風格) ---
+# [UI] 統一視覺風格
 st.markdown("""
 <style>
     /* KPI 卡片樣式 */
     div[data-testid="metric-container"] {
-        background-color: #262730;
+        background-color: #2b2d3e;
         border: 1px solid #464b5c;
         padding: 15px;
         border-radius: 8px;
@@ -32,7 +32,7 @@ st.markdown("""
 
 @st.cache_resource
 def load_resources():
-    # 嘗試多種路徑以適應 Docker 與 本機 環境
+    """載入訓練好的 TF-IDF 模型與索引"""
     possible_paths = [
         os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'data', 'models'),
         'data/models',
@@ -53,10 +53,16 @@ def load_resources():
         with open(os.path.join(base_path, 'tfidf_matrix.pkl'), 'rb') as f: mx = pickle.load(f)
         with open(os.path.join(base_path, 'indices.pkl'), 'rb') as f: idx = pickle.load(f)
         return df, mx, idx
-    except Exception as e:
+    except Exception:
         return None, None, None
 
 def get_recs_with_explanation(title, df, mx, idx):
+    """
+    [XAI] 可解釋性推薦邏輯
+    1. 計算 Cosine Similarity
+    2. 找出 Top 10 相似遊戲
+    3. 比較兩者標籤，生成「推薦理由」
+    """
     if title not in idx: return []
     i = idx[title]
     if isinstance(i, pd.Series): i = i.iloc[0]
@@ -90,7 +96,7 @@ def get_recs_with_explanation(title, df, mx, idx):
         
     return pd.DataFrame(results)
 
-# --- UI 佈局 ---
+# --- 主畫面 ---
 st.title("🚀 AI 遊戲推薦引擎 (Explainable)")
 st.caption("基於 TF-IDF 內容過濾與使用者行為分析 | 效能優化：Polars ETL")
 
@@ -104,7 +110,6 @@ else:
     with c1:
         st.subheader("設定參數")
         options = df['game_title'].values
-        # 預設選一個熱門的
         default_game = 'Elden Ring'
         default_idx = list(options).index(default_game) if default_game in options else 0
         

@@ -14,15 +14,6 @@
 
 ---
 
-### 📸 系統展示 (System Demo)
-
-| **全景儀表板 (KPI & Trends)** | **玩家輿情深度分析** |
-|:---:|:---:|
-| <img src="docs/images/dashboard_demo.png" alt="Dashboard" width="400"/> | <img src="docs/images/review_demo.png" alt="Review Analysis" width="400"/> |
-| *全域連動篩選與市場供需分析* | *多國語言輿情與關鍵字分析* |
-
----
-
 ### 🚀 核心功能 (Key Features)
 
 #### 1. 📊 互動式市場儀表板 (KPI Dashboard)
@@ -47,19 +38,6 @@
 
 ---
 
-### 🛠️ 技術棧 (Tech Stack)
-
-| 領域 | 技術/工具 | 用途 |
-|---|---|---|
-| **Infrastructure** | Docker & Docker Compose | 容器化部署、服務編排、環境隔離 |
-| **Backend / ETL** | Python, **Polars**, SQLAlchemy | 高效能數據提取、轉換、載入 (ETL) |
-| **Data Quality** | **Pandera**, Pytest | 資料綱要驗證 (Schema Validation) 與單元測試 |
-| **Database** | PostgreSQL | 持久化存儲結構化遊戲數據 |
-| **Frontend** | Streamlit, Plotly | 快速構建互動式數據應用與視覺化 |
-| **Machine Learning** | Scikit-learn, TF-IDF | 內容過濾推薦演算法 |
-
----
-
 ### 🏗️ 系統架構 (System Architecture)
 
 ```mermaid
@@ -71,24 +49,16 @@ graph LR
         ETL[⚙️ ETL Service (Polars)] -- 高速寫入 --> DB
         RawData[📄 CSV / API] --> ETL
     end
-📦 資料來源與設定 (Data Source Setup)
-由於原始資料集 (Raw Data) 體積龐大 (>7GB)，不包含在本儲存庫中。請依照以下步驟準備資料：
+🛠️ 技術棧 (Tech Stack)
+領域	技術/工具	用途
+Infrastructure	Docker & Docker Compose	容器化部署、服務編排、環境隔離
+Backend / ETL	Python, Polars, SQLAlchemy	高效能數據提取、轉換、載入 (ETL)
+Data Quality	Pandera, Pytest	資料綱要驗證 (Schema Validation) 與單元測試
+Database	PostgreSQL	持久化存儲結構化遊戲數據
+Frontend	Streamlit, Plotly	快速構建互動式數據應用與視覺化
+Machine Learning	Scikit-learn, TF-IDF	內容過濾推薦演算法
 
-下載資料集：
-
-遊戲元數據：Kaggle - Steam Games Dataset (重新命名為 games_2025.csv)
-
-玩家評論數據：Kaggle - Steam Games Reviews 2024 (解壓至資料夾)
-
-放置檔案： 將 games_2025.csv 放入 data/raw/。
-
-執行合併腳本 (針對評論資料)：
-
-Bash
-
-export STEAM_REVIEWS_PATH="/path/to/downloaded/SteamReviews2024"
-python merge_reviews.py
-(此步驟將自動產出清洗後的 reviews_2024.csv)
+匯出到試算表
 
 ⚡ 快速開始 (Getting Started)
 本專案提供 Makefile 支援，一鍵管理生命週期。
@@ -98,7 +68,6 @@ Bash
 
 git clone [https://github.com/your-username/steam-analytics-engine.git](https://github.com/your-username/steam-analytics-engine.git)
 cd steam-analytics-engine
-
 2. 啟動服務 (Docker 模式 - 推薦)
 一鍵啟動所有服務（包含 DB 初始化、ETL 資料寫入與 Web App）：
 
@@ -106,7 +75,6 @@ Bash
 
 make docker-up
 # 或: docker-compose up --build
-
 3. 本機開發模式 (Optional)
 Bash
 
@@ -119,6 +87,5 @@ make test
 
 # 啟動網頁
 make run-app
-
 4. 訪問應用
 數據儀表板: http://localhost:8501

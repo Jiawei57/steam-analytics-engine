@@ -16,17 +16,30 @@
 
 ### 📸 系統展示 (System Demo)
 
-> 實際運行畫面展示：全域篩選儀表板與 AI 分析結果。
+> 本系統提供從宏觀市場分析到微觀評論洞察的完整解決方案。
 
-| **全景儀表板 (Dashboard)** | **玩家輿情與推薦 (Analysis)** |
+#### 1. 📊 全景儀表板 (Overall Dashboard)
+展示全域篩選器、核心 KPI 指標、以及市場供需趨勢分析。
+
+| **市場概況與 KPI** | **進階篩選與列表** |
 |:---:|:---:|
-| <img src="docs/images/Overall Dashboard_1.jpg" alt="Dashboard Demo" width="100%"/>
-| <img src="docs/images/Overall Dashboard_2.jpg" alt="Dashboard Demo" width="100%"/>
-| <img src="docs/images/Overall Dashboard_3.jpg" alt="Dashboard Demo" width="100%"/>
-| <img src="docs/images/Overall Dashboard_4.jpg" alt="Dashboard Demo" width="100%"/>
-| <img src="docs/images/智慧推薦模擬.jpg" alt="Dashboard Demo" width="100%"/>
-| <img src="docs/images/玩家評論分析.jpg" alt="Dashboard Demo" width="100%"/>
-| *圖 1：全域連動篩選與市場供需分析* | *圖 2：多國語言輿情與 AI 推薦結果* |
+| <img src="docs/images/Overall Dashboard_1.jpg" alt="KPI Overview" width="100%"/> | <img src="docs/images/Overall Dashboard_2.jpg" alt="Filters & List" width="100%"/> |
+| *圖 1：核心指標監控* | *圖 2：詳細資料篩選* |
+
+| **市場熱力圖 (Heatmap)** | **供需趨勢 (Trends)** |
+|:---:|:---:|
+| <img src="docs/images/Overall Dashboard_3.jpg" alt="Market Heatmap" width="100%"/> | <img src="docs/images/Overall Dashboard_4.jpg" alt="Supply Demand" width="100%"/> |
+| *圖 3：定價策略熱點分析* | *圖 4：歷年市場趨勢* |
+
+---
+
+#### 2. 🤖 AI 智慧應用 (AI Applications)
+整合自然語言處理 (NLP) 與推薦演算法，提供深度的玩家洞察。
+
+| **智慧推薦模擬** | **玩家評論深度分析** |
+|:---:|:---:|
+| <img src="docs/images/智慧推薦模擬.jpg" alt="AI Recommendation" width="100%"/> | <img src="docs/images/玩家評論分析.jpg" alt="Review Analysis" width="100%"/> |
+| *圖 5：可解釋性推薦 (XAI)* | *圖 6：多國語言輿情監測* |
 
 ---
 
